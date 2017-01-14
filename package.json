@@ -1,0 +1,33 @@
+
+{
+  "name": "react-native-workers",
+  "version": "0.0.1",
+  "description": "JS workers for React Native",
+  "license": "Apache 2.0",
+  "author": "https://github.com/fabriciovergal",
+  "homepage": "https://github.com/fabriciovergal/react-native-workers",
+  "bugs": {
+    "url": "https://github.com/fabriciovergal/react-native-workers/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabriciovergal/react-native-workers"
+  },
+  "main": "index.js",
+  "keywords": [
+    "react-native",
+    "react-component",
+    "worker",
+    "web worker",
+    "WebWorker",
+    "background",
+    "ios",
+    "android"
+  ],
+  "dependencies": {
+    "react-native": "^0.40.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

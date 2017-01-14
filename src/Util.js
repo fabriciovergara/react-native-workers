@@ -1,0 +1,1 @@
+export const isValidMessage = message => !!message && typeof  message === 'string'
