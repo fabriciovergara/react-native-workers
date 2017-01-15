@@ -41,7 +41,7 @@ react-native link rn-workers
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
-                new RNWorkers() // <-- add this line
+                new RNWorkersPackage() // <-- add this line
             );
         }
     }
