@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
-import { Component, workerService } from 'react-native-workers'
+import { Component, workerService } from 'rn-workers'
 
 export default class rnapp extends Component {
 
@@ -21,4 +21,3 @@ export default class rnapp extends Component {
 }
 
 AppRegistry.registerComponent('rnapp', () => rnapp);
-

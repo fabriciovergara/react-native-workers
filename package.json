@@ -1,6 +1,6 @@
 
 {
-  "name": "react-native-workers",
+  "name": "rn-workers",
   "version": "0.0.1",
   "description": "JS workers for React Native",
   "license": "Apache 2.0",

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { worker }from 'react-native-workers'
+import { worker }from 'rn-workers'
 import { AppRegistry, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default class rnapp extends Component {
