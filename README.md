@@ -127,7 +127,7 @@ TODO: Publish on npm :)
             //Subscribe a listener to receive message from worker
             this.subscription = worker.subscribe(message => this.setState({ text: message))
 
-            //Send message to worker
+            //Send message to worker (Only strings is allowed for now)
             worker.sendMessage("Hey Worker!")
         }
 
@@ -153,7 +153,7 @@ TODO: Publish on npm :)
             //Subscribe a listener to receive message from the app
             this.subscription = workerService.subscribe(message => {
                 
-                //Send message to app
+                //Send message to app (Only strings is allowed for now)
                 workerService.sendMessage("Hello from the other side (" + message + ")")
             })
         }
