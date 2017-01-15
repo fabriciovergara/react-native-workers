@@ -2,7 +2,10 @@
 Do heavy data process outside of your UI JS thread.
 
 ### Automatic Instalation
-TODO: Publish on npm :)
+```
+npm install --save rn-workers
+react-native link rn-workers
+```
 
 ### Manual Instalation
 
