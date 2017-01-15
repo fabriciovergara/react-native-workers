@@ -12,7 +12,7 @@ react-native link rn-workers
 #### iOS
 
 1. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ `Add Files to <...>`
-2. Go to `node_modules` ➜ `react-native-workers` ➜ `ios` ➜ select `RNWorkers.xcodeproj`
+2. Go to `node_modules` ➜ `rn-workers` ➜ `ios` ➜ select `RNWorkers.xcodeproj`
 3. Add `RNWorkers.a` to `Build Phases -> Link Binary With Libraries`
 4. Pray and try to compile
 
@@ -20,15 +20,15 @@ react-native link rn-workers
 1. Add the following lines to `android/settings.gradle`:
 
 ```gradle
-    include ':react-native-workers'
-    project(':react-native-workers').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-workers/android')
+    include ':rn-workers'
+    project(':rn-workers').projectDir = new File(rootProject.projectDir, '../node_modules/rn-workers/android')
 ```
 
 2. Add the compile line to the dependencies in `android/app/build.gradle`:
 
 ```gradle
     dependencies {
-        compile project(':react-native-workers')
+        compile project(':rn-workers')
     }
 ```
 3. Add the import and link the package in `MainApplication.java`:
@@ -118,7 +118,7 @@ react-native link rn-workers
 
 ```javascript 
    
-    import { worker } from 'react-native-workers'
+    import { worker } from 'rn-workers'
 
     export default class rnapp extends React.Component {
 
@@ -148,7 +148,7 @@ react-native link rn-workers
 ```javascript 
    
     import { AppRegistry } from 'react-native';
-    import { Component, workerService } from 'react-native-workers'
+    import { Component, workerService } from 'rn-workers'
 
     export default class rnapp extends Component {
 
