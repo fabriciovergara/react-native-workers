@@ -10,7 +10,7 @@ TODO: Publish on npm :)
 
 1. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ `Add Files to <...>`
 2. Go to `node_modules` ➜ `react-native-workers` ➜ `ios` ➜ select `RNWorkers.xcodeproj`
-3. Add `RNImagePicker.a` to `Build Phases -> Link Binary With Libraries`
+3. Add `RNWorkers.a` to `Build Phases -> Link Binary With Libraries`
 4. Pray and try to compile
 
 #### Android
