@@ -140,7 +140,7 @@ TODO: Publish on npm :)
      }
  ```
  
- ### Worker side
+### Worker side
 
 ```javascript 
    
