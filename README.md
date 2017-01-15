@@ -49,7 +49,7 @@ TODO: Publish on npm :)
     
 ```swift
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
-      //CRITICAL: Must be initialized before creation of rootView
+      //CRITICAL: Must be initialized before creation of rootView to be possible to debug on chrome console
       RNWorkersManager.sharedInstance().initWorker(withBundleRoot: "index.worker", fallbackResouce: "worker", moduleName: "rnapp")  
 
       let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios",
@@ -57,8 +57,7 @@ TODO: Publish on npm :)
 
       let rootView = RCTRootView.init(bundleURL: jsCodeLocation, moduleName: "rnapp", initialProperties: nil, launchOptions: launchOptions)
       rootView?.backgroundColor = UIColor.init(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1)
-1.  1. Create a index.worker.js in the react-native root project (same level of index.ios.js and index.android.js)
-2. Register a component rendering null
+
       let rootViewController = UIViewController()
       rootViewController.view = rootView
 
@@ -97,7 +96,7 @@ TODO: Publish on npm :)
       
       @Override
       protected void onCreate(Bundle savedInstanceState) {       
-        //CRITICAL: Must be started before super.onCreate
+        //CRITICAL: Must be started before super.onCreate to be possible to debug on chrome console
         RNWorkersManager.start(getMainComponentName());
         super.onCreate(savedInstanceState);
       }
