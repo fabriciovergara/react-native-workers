@@ -146,7 +146,6 @@ react-native link rn-workers
 
 ```javascript 
    
-    import { AppRegistry } from 'react-native';
     import { Component, workerService } from 'rn-workers'
 
     export default class rnapp extends Component {
@@ -174,7 +173,7 @@ react-native link rn-workers
   
 ### iOS
 
-  * Sometime you need to start and stop the debugger to fully release the worker js
+  * Sometime you need to start and stop the debugger to fully reload the worker js
   * Start the app debugger will automatically start the worker debugger
   
 ### Android
