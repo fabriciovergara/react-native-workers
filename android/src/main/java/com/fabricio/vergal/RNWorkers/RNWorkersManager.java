@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager.ReactInstanceEventListener;
@@ -42,7 +41,6 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
     private final ReactNativeHost mReactNativeHost;
     private final Application mApplication;
     private final String mDebugHost;
-    private final ReactRootView mReactRootView;
     private ReactApplicationContext mWorkerReactContext;
     private ReactApplicationContext mMainReactContext;
 
@@ -142,7 +140,6 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
         mReactNativeMainHost = mainHost;
         mApplication = application;
         mDebugHost = debugHost;
-        mReactRootView = new ReactRootView(mApplication);
         mReactNativeHost = workerHost;
         mApplication.registerActivityLifecycleCallbacks(this);
     }
@@ -150,7 +147,11 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
     private void startWorker(final String componentName) {
         mReactNativeHost.getReactInstanceManager().addReactInstanceEventListener(mWorkerInstanceListener);
         mReactNativeMainHost.getReactInstanceManager().addReactInstanceEventListener(mMainInstanceListener);
-        mReactRootView.startReactApplication(mReactNativeHost.getReactInstanceManager(), componentName);
+
+        if (!mReactNativeMainHost.getReactInstanceManager().hasStartedCreatingInitialContext()) {
+            mReactNativeMainHost.getReactInstanceManager().createReactContextInBackground();
+        }
+
         mReactNativeHost.getReactInstanceManager().onHostResume(null, null);
 
         final DeveloperSettings settings = mReactNativeHost.getReactInstanceManager().getDevSupportManager().getDevSettings();
@@ -195,10 +196,6 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
         if (!(activity instanceof ReactActivity)) {
             return;
         }
-
-        final ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView().getRootView();
-        viewGroup.addView(mReactRootView, new ViewGroup.LayoutParams(0, 0));
-        mReactRootView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -207,20 +204,10 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if (!(activity instanceof ReactActivity)) {
-            return;
-        }
-
-        mReactNativeHost.getReactInstanceManager().onHostResume(activity, null);
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        if (!(activity instanceof ReactActivity)) {
-            return;
-        }
-
-        mReactNativeHost.getReactInstanceManager().onHostPause(activity);
     }
 
     @Override
@@ -237,10 +224,7 @@ public class RNWorkersManager implements Application.ActivityLifecycleCallbacks 
             return;
         }
 
-        if (mReactRootView != null) {
-            mReactRootView.unmountReactApplication();
-        }
-
+        mReactNativeHost.getReactInstanceManager().onHostPause(null);
         mReactNativeHost.getReactInstanceManager().removeReactInstanceEventListener(mWorkerInstanceListener);
         mReactNativeMainHost.getReactInstanceManager().removeReactInstanceEventListener(mMainInstanceListener);
         mReactNativeHost.getReactInstanceManager().onHostDestroy(activity);

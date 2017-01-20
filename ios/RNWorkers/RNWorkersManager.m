@@ -2,7 +2,6 @@
 
 @implementation RNWorkersManager
 {
-  RCTRootView *view;
   RCTBridge *_workerBridge;
   RCTBridge *_mainBridge;
 }
@@ -29,13 +28,13 @@
     jsCodeLocation = [[NSURL alloc] initWithString:path];
   }
   
-  view = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation moduleName:name initialProperties:nil launchOptions:nil];
-  view.frame = CGRectMake(0, 0, 0, 0);
+    _workerBridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
+                                          moduleProvider:nil
+                                           launchOptions:nil];
 }
 
 - (void) startWithRootView: (RCTRootView*) rootView
 {
-  _workerBridge = view.bridge;
   _mainBridge = rootView.bridge;
 }
 

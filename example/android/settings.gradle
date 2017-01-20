@@ -1,5 +1,5 @@
 rootProject.name = 'rnapp'
-include ':react-native-workers'
-project(':react-native-workers').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-workers/android')
+include ':rn-workers'
+project(':rn-workers').projectDir = new File(rootProject.projectDir, '../node_modules/rn-workers/android')
 
 include ':app'
