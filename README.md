@@ -108,8 +108,7 @@ react-native link rn-workers
 #### Javascript
   
   1. Create a index.worker.js in the react-native root project (same level of index.ios.js and index.android.js)
-  2. Register a component as you do for ios and android using AppRegistry.registerComponent
-  3. In the render method always return null (performance metters)
+  2. import a worker.jsbundle in iOS Project and index.worker.jsbundle  on Android Project
   
 ## Usage
 
@@ -146,24 +145,12 @@ react-native link rn-workers
 
 ```javascript 
    
-    import { Component, workerService } from 'rn-workers'
+    import { workerService } from 'rn-workers'
 
-    export default class rnapp extends Component {
-
-        componentDidMount () {
-            //Subscribe a listener to receive message from the app
-            this.subscription = workerService.subscribe(message => {
-                
-                //Send message to app (Only strings is allowed for now)
-                workerService.sendMessage("Hello from the other side (" + message + ")")
-            })
-        }
-
-        componentWillUnmount () {
-            //Unsubscribe listener
-            this.subscription()
-        }
-    }
+   workerService.subscribe(message => {
+        //Send message to app (Only strings is allowed for now)
+        workerService.sendMessage("Hello from the other side (" + message + ")")
+    })
  ```
  
 # Observation
