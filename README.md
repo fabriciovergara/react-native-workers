@@ -213,4 +213,4 @@ react-native link rn-workers
 ``` 
  
 # License
-~~Cancel~~ GPL ..... just kindind, its Beerware license
+~~Cancel~~ GPL ..... just kindind, its Apache 2.0
