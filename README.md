@@ -54,7 +54,11 @@ react-native link rn-workers
       //CRITICAL: Must be initialized before creation of rootView to be possible to debug on chrome console
       //Initialize using default worker
       RNWorkersManager.sharedInstance().initWorker()  
-
+      
+      //If you want to use the default worker and an adicional one
+      RNWorkersManager.sharedInstance().initWorker()
+      RNWorkersManager.sharedInstance().initWorker(withPort: 8083, bundleRoot: "index.worker2", fallbackResouce: "worker2")
+    
       let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios",
                                                                           fallbackResource: "main")
 
@@ -86,8 +90,21 @@ react-native link rn-workers
         public void onCreate() {
             super.onCreate();
             SoLoader.init(this, /* native exopackage */ false);
+            
             //Initialize using default worker
             RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
+            
+           
+            //If you want to use the default worker and an adicional one
+            final RNWorker worker1 = RNWorker.createDefault(this, BuildConfig.DEBUG);
+            final RNWorker worker2 = new RNWorker.Builder(this, BuildConfig.DEBUG)
+                .entryPoint("index.worker2")
+                .bundleAsset("index.worker2.bundle")
+                .port(8082)
+                .packages(new CustomPackage())
+                .build();
+
+            RNWorkersManager.getInstance().init(this, worker1, worker2);
         }
     }
 ```
@@ -128,6 +145,10 @@ react-native link rn-workers
         componentDidMount () {
             //Create using default worker port (8082)
             this.worker = new Worker();
+            
+            //Create worker pointing to custom one
+            this.worker2 = new Worker(8083);
+            
             
             //Add listener to receve messages
             this.worker.onmessage = message => this.setState({
