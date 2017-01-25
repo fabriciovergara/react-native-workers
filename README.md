@@ -1,4 +1,4 @@
-# react-native-workers
+# react-native-workers (Only for RN 0.40^)
 Do heavy data process outside of your UI JS thread.
 
 ### Automatic Instalation
