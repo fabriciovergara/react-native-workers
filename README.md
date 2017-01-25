@@ -52,7 +52,8 @@ react-native link rn-workers
 ```swift
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
       //CRITICAL: Must be initialized before creation of rootView to be possible to debug on chrome console
-      RNWorkersManager.sharedInstance().initWorker(withBundleRoot: "index.worker", fallbackResouce: "worker", moduleName: "rnapp")  
+      //Initialize using default worker
+      RNWorkersManager.sharedInstance().initWorker()  
 
       let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios",
                                                                           fallbackResource: "main")
@@ -64,7 +65,7 @@ react-native link rn-workers
       rootViewController.view = rootView
 
       //Pass rootView referece
-      RNWorkersManager.sharedInstance().start(with: rootView) 
+      RNWorkersManager.sharedInstance().startWorkers(with: rootView)
 
       self.window = UIWindow.init(frame: UIScreen.main.bounds)
       self.window!.rootViewController = rootViewController
@@ -85,8 +86,8 @@ react-native link rn-workers
         public void onCreate() {
             super.onCreate();
             SoLoader.init(this, /* native exopackage */ false);
-            //Initialize Manager instance
-            RNWorkersManager.init(this, BuildConfig.DEBUG);
+            //Initialize using default worker
+            RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
         }
     }
 ```
@@ -99,7 +100,7 @@ react-native link rn-workers
       @Override
       protected void onCreate(Bundle savedInstanceState) {       
         //CRITICAL: Must be started before super.onCreate to be possible to debug on chrome console
-        RNWorkersManager.start(getMainComponentName());
+        RNWorkersManager.getInstance().startWorkers();
         super.onCreate(savedInstanceState);
       }
   }
@@ -116,7 +117,7 @@ react-native link rn-workers
 
 ```javascript 
    
-    import { worker } from 'rn-workers'
+    import { Worker } from 'rn-workers'
 
     export default class rnapp extends React.Component {
 
@@ -125,16 +126,22 @@ react-native link rn-workers
         }
 
         componentDidMount () {
-            //Subscribe a listener to receive message from worker
-            this.subscription = worker.subscribe(message => this.setState({ text: message))
+            //Create using default worker port (8082)
+            this.worker = new Worker();
+            
+            //Add listener to receve messages
+            this.worker.onmessage = message => this.setState({
+                 text: message,
+                 count: this.state.count + 1
+            });
 
             //Send message to worker (Only strings is allowed for now)
-            worker.sendMessage("Hey Worker!")
+            this.worker.postMessage("Hey Worker!")
         }
 
         componentWillUnmount () {
-            //Unsubscribe listener
-            this.subscription()
+            //Terminate worker
+            this.worker.terminate();
         }
         
         (...)
@@ -145,12 +152,14 @@ react-native link rn-workers
 
 ```javascript 
    
-    import { workerService } from 'rn-workers'
+    import { WorkerService } from 'rn-workers'
+    
+    const worker = new WorkerService();
+    worker.onmessage = message => {
+        //Reply the message back to app
+        worker.postMessage("Hello from the other side (" + message + ")")
+    };
 
-   workerService.subscribe(message => {
-        //Send message to app (Only strings is allowed for now)
-        workerService.sendMessage("Hello from the other side (" + message + ")")
-    })
  ```
  
 # Observation
