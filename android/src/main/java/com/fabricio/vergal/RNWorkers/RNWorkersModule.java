@@ -18,8 +18,8 @@ public class RNWorkersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendMessageToWorker(final String message) {
-        final ReactApplicationContext context = RNWorkersManager.getWorkerReactContext();
+    public void sendMessageToWorker(final int port, final String message) {
+        final ReactApplicationContext context = RNWorkersManager.getInstance().getWorkerReactContext(port);
         if (context == null) {
             return;
         }
@@ -30,7 +30,7 @@ public class RNWorkersModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void sendMessageToApp(final String message) {
-        final ReactApplicationContext context = RNWorkersManager.getMainReactContext();
+        final ReactApplicationContext context = RNWorkersManager.getInstance().getMainReactContext();
         if (context == null) {
             return;
         }

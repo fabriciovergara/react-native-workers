@@ -1,8 +1,9 @@
 import { AppRegistry } from 'react-native';
-import { workerService } from 'rn-workers'
+import { WorkerService } from 'rn-workers'
 
-workerService.subscribe(message => {
-  const now = Date.now()
+const worker = new WorkerService();
+worker.onmessage = message => {
+  const now = Date.now();
   while (Date.now() < now + 2000);
-  workerService.sendMessage("Hello from the other side (" + message + ")")
-})
+  worker.postMessage("Hello from the other side (" + message + ")")
+};

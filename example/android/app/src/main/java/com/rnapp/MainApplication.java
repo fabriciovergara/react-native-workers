@@ -3,8 +3,8 @@ package com.rnapp;
 import android.app.Application;
 
 import com.fabricio.vergal.RNWorkers.RNWorkersManager;
-import com.facebook.react.ReactApplication;
 import com.fabricio.vergal.RNWorkers.RNWorkersPackage;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -26,7 +26,6 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
-            new RNWorkersPackage(),
                     new RNWorkersPackage()
             );
         }
@@ -40,7 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        SoLoader.init(this, /* native exopackage */ false);
-        RNWorkersManager.init(this, BuildConfig.DEBUG);
+        SoLoader.init(this, false);
+        RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
     }
 }

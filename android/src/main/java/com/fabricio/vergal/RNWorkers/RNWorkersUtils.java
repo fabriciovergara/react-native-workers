@@ -3,6 +3,7 @@ package com.fabricio.vergal.RNWorkers;
 import android.content.SharedPreferences;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 public class RNWorkersUtils {
@@ -31,6 +32,19 @@ public class RNWorkersUtils {
 
         return null;
     }
+
+    static <T> Method getMethod(final T object, final String name) {
+        final Class<?> clazz = object.getClass();
+        final Method[] methods = clazz.getDeclaredMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().equals(name)) {
+                return methods[i];
+            }
+        }
+
+        return null;
+    }
+
 
     static void putObject(final SharedPreferences.Editor editor, final String key,
                           final Object value) {

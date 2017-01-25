@@ -1,7 +1,8 @@
 import { NativeModules } from 'react-native';
-import creator from './src/workerBridgeCreator'
+import creator from './src/createWorker';
 
-const { RNWorkers } = NativeModules
+const { RNWorkers } = NativeModules;
 
-export const workerService = creator("RNWorkers", message => RNWorkers.sendMessageToApp(message))
-export const worker = creator("RNWorkersApp", message => RNWorkers.sendMessageToWorker(message))
+export const WorkerService = creator("RNWorkers", message => RNWorkers.sendMessageToApp(message));
+export const Worker = creator("RNWorkersApp", (message, port) => RNWorkers.sendMessageToWorker(port, message));
+export default Worker

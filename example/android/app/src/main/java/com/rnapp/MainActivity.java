@@ -18,7 +18,7 @@ public class MainActivity extends ReactActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        RNWorkersManager.start(getMainComponentName());
+        RNWorkersManager.getInstance().startWorkers();
         super.onCreate(savedInstanceState);
     }
 }

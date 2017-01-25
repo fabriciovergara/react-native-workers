@@ -8,11 +8,17 @@
 #import <React/RCTRootView.h>
 
 @interface RNWorkersManager : NSObject
-+ (instancetype)sharedInstance;
-- (void) initWorkerWithBundleRoot: (NSString*) path fallbackResouce:(NSString*) resource moduleName:(NSString*) name;
-- (void) startWithRootView: (RCTRootView*) rootView;
+{
+    NSMutableDictionary *workerDictionary;
+    RCTBridge *mainBridge;
+}
 
-@property (nonatomic, strong, readonly) RCTBridge *workerBridge;
++ (instancetype)sharedInstance;
+- (void) initWorker;
+- (void) initWorkerWithPort:(int) port bundleRoot:(NSString*) bundle fallbackResouce:(NSString*) resource;
+- (void) startWorkersWithRootView: (RCTRootView*) rootView;
+
+@property (nonatomic, strong, readonly) NSMutableDictionary *workerDictionary;
 @property (nonatomic, strong, readonly) RCTBridge *mainBridge;
 
 @end
