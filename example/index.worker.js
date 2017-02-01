@@ -1,4 +1,3 @@
-import { AppRegistry } from 'react-native';
 import { WorkerService } from 'rn-workers'
 
 const worker = new WorkerService();

@@ -18,6 +18,7 @@ public class RNWorkersManager {
     private static RNWorkersManager sInstance;
     private ReactNativeHost mMainHost;
     private ReactApplicationContext mMainReactContext;
+    private boolean mSimulationEnabled = false;
     private final ReactInstanceEventListener mMainHostListener = new ReactInstanceEventListener() {
         @Override
         public void onReactContextInitialized(ReactContext context) {
@@ -61,6 +62,10 @@ public class RNWorkersManager {
 
 
     public void startWorkers() {
+        if (mSimulationEnabled) {
+            return;
+        }
+
         mMainHost.getReactInstanceManager().addReactInstanceEventListener(mMainHostListener);
         for (final RNWorker worker : mRNWorkers) {
             worker.start();
@@ -72,6 +77,11 @@ public class RNWorkersManager {
     }
 
     public ReactApplicationContext getWorkerReactContext(int port) {
+        if (mSimulationEnabled) {
+            return mMainReactContext;
+        }
+
+
         for (final RNWorker worker : mRNWorkers) {
             if (worker.getPort() == port) {
                 return worker.getReactContext();
@@ -79,5 +89,13 @@ public class RNWorkersManager {
         }
 
         return null;
+    }
+
+    public boolean isSimulationEnabled() {
+        return mSimulationEnabled;
+    }
+
+    public void setSimulationEnabled(boolean enabled) {
+        mSimulationEnabled = enabled;
     }
 }

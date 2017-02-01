@@ -5,6 +5,11 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 
 public class RNWorkersModule extends ReactContextBaseJavaModule {
 
@@ -15,6 +20,14 @@ public class RNWorkersModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "RNWorkers";
+    }
+
+    @Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put("simulationEnabled", RNWorkersManager.getInstance().isSimulationEnabled());
+        return constants;
     }
 
     @ReactMethod

@@ -5,7 +5,7 @@ import { AppRegistry, StyleSheet, Text, View, TouchableOpacity } from 'react-nat
 export default class rnapp extends Component {
 
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     this.state = {
       text: "",
       count: 0,

@@ -26,4 +26,9 @@ RCT_EXPORT_METHOD(sendMessageToApp:(NSString *)message)
     [mainBridge.eventDispatcher sendAppEventWithName:@"RNWorkersApp" body:message];
 }
 
+- (NSDictionary *)constantsToExport
+{
+    return @{ @"simulationEnabled": [RNWorkersManager sharedInstance].simulationEnabled };
+}
+
 @end

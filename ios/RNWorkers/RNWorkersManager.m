@@ -4,7 +4,7 @@
 
 @synthesize mainBridge;
 @synthesize workerDictionary;
-
+@synthesize simulationEnabled;
 
 + (instancetype)sharedInstance
 {
@@ -19,7 +19,8 @@
 - (id)init
 {
     self = [super init];
-    workerDictionary = [[NSMutableDictionary alloc] init];    
+    workerDictionary = [[NSMutableDictionary alloc] init];
+    simulationEnabled = [NSNumber numberWithBool: NO];
     return self;
 }
 
@@ -41,17 +42,37 @@
         NSString *path = [jsCodeLocation.absoluteString stringByReplacingOccurrencesOfString:appPort withString:workerPort];
         jsCodeLocation = [[NSURL alloc] initWithString:path];
     #endif
-  
-    RCTBridge *worker = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
-                                              moduleProvider:nil
-                                               launchOptions:nil];
     
-    [workerDictionary setObject:worker forKey:nsPort];
+    
+    if([simulationEnabled boolValue] ==  NO){
+        RCTBridge *worker = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
+                                       moduleProvider:nil
+                                        launchOptions:nil];
+        [workerDictionary setObject:worker forKey:nsPort];
+    }else {
+        [workerDictionary setObject:nsPort forKey:nsPort];
+    }
+    
+    
+    
 }
 
 - (void) startWorkersWithRootView: (RCTRootView*) rootView
 {
-  mainBridge = rootView.bridge;
+    mainBridge = rootView.bridge;
+    if([simulationEnabled boolValue] == YES){
+        [self fillDictionaryWithMainBridge];
+    }
+}
+
+- (void) fillDictionaryWithMainBridge
+{
+    NSArray *keys = [workerDictionary allKeys];
+    if(keys != nil){
+        for (id key in keys) {
+            [workerDictionary setObject:mainBridge forKey:key];
+        }
+    }
 }
 
 @end

@@ -7,6 +7,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
+    
     //Create default worker on port 8082
     RNWorkersManager.sharedInstance().initWorker()
     

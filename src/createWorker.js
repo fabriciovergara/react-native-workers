@@ -14,7 +14,7 @@ export default (eventName, sendMessage) => {
     }
 
     terminate(){
-      this.subscription();
+      this.subscription.remove();
     }
 
     postMessage(message){
