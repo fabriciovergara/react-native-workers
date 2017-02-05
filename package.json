@@ -1,7 +1,7 @@
 
 {
   "name": "rn-workers",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "JS workers for React Native",
   "license": "Apache 2.0",
   "author": "https://github.com/fabriciovergal",
@@ -24,9 +24,6 @@
     "ios",
     "android"
   ],
-  "dependencies": {
-    "react-native": "^0.40.0"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
