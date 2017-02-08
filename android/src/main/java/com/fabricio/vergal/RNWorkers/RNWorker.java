@@ -105,7 +105,7 @@ public class RNWorker implements ReactInstanceEventListener {
 
             mHost = new ReactNativeHost(mApplication) {
                 @Override
-                protected boolean getUseDeveloperSupport() {
+                public boolean getUseDeveloperSupport() {
                     return mDeveloperSupport;
                 }
 
