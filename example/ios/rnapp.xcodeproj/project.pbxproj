@@ -23,6 +23,7 @@
 		2782837A46484262943EB52A /* libRNWorkers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D37483E2F304DF2993E970B /* libRNWorkers.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		BB31A6691E4BBC9D007365A3 /* worker.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = BB31A6681E4BBC9D007365A3 /* worker.jsbundle */; };
 		BB9D0ABF1E2816B500CD2926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9D0ABD1E2816B500CD2926 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -240,6 +241,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8D37483E2F304DF2993E970B /* libRNWorkers.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNWorkers.a; sourceTree = "<group>"; };
+		BB31A6681E4BBC9D007365A3 /* worker.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = worker.jsbundle; sourceTree = "<group>"; };
 		BB9D0ABD1E2816B500CD2926 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = rnapp/AppDelegate.swift; sourceTree = "<group>"; };
 		BB9D0ABE1E2816B500CD2926 /* rnapp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "rnapp-Bridging-Header.h"; path = "rnapp/rnapp-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -355,6 +357,7 @@
 		13B07FAE1A68108700A75B9A /* rnapp */ = {
 			isa = PBXGroup;
 			children = (
+				BB31A6681E4BBC9D007365A3 /* worker.jsbundle */,
 				BB9D0ABD1E2816B500CD2926 /* AppDelegate.swift */,
 				BB9D0ABE1E2816B500CD2926 /* rnapp-Bridging-Header.h */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -779,6 +782,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB31A6691E4BBC9D007365A3 /* worker.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

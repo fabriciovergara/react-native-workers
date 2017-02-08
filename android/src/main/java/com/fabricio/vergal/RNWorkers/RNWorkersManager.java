@@ -19,6 +19,7 @@ public class RNWorkersManager {
     private ReactNativeHost mMainHost;
     private ReactApplicationContext mMainReactContext;
     private boolean mSimulationEnabled = false;
+    private boolean mPreferResourceEnabled = false;
     private final ReactInstanceEventListener mMainHostListener = new ReactInstanceEventListener() {
         @Override
         public void onReactContextInitialized(ReactContext context) {
@@ -29,7 +30,10 @@ public class RNWorkersManager {
     private final SimpleLifecycleCallbacks mLifecycleCallbacks = new SimpleLifecycleCallbacks() {
         @Override
         public void onActivityDestroyed(Activity activity) {
-            mMainHost.getReactInstanceManager().removeReactInstanceEventListener(mMainHostListener);
+            if (mSimulationEnabled) {
+                return;
+            }
+
             for (final RNWorker worker : mRNWorkers) {
                 worker.stop();
             }
@@ -44,14 +48,15 @@ public class RNWorkersManager {
         return sInstance;
     }
 
-    public <T extends Application & ReactApplication> void init(
-            final T reactApp, final RNWorker... workers) {
+    public <T extends Application & ReactApplication> void init(final T reactApp,
+                                                                final RNWorker... workers) {
         mMainHost = reactApp.getReactNativeHost();
         mRNWorkers = new ArrayList<>();
         if (workers != null && workers.length > 0) {
             mRNWorkers.addAll(Arrays.asList(workers));
         }
 
+        mMainHost.getReactInstanceManager().addReactInstanceEventListener(mMainHostListener);
         reactApp.registerActivityLifecycleCallbacks(mLifecycleCallbacks);
     }
 
@@ -66,9 +71,8 @@ public class RNWorkersManager {
             return;
         }
 
-        mMainHost.getReactInstanceManager().addReactInstanceEventListener(mMainHostListener);
         for (final RNWorker worker : mRNWorkers) {
-            worker.start();
+            worker.start(mPreferResourceEnabled);
         }
     }
 
@@ -97,5 +101,9 @@ public class RNWorkersManager {
 
     public void setSimulationEnabled(boolean enabled) {
         mSimulationEnabled = enabled;
+    }
+
+    public void setPreferResourceEnabled(boolean enabled) {
+        mPreferResourceEnabled = enabled;
     }
 }

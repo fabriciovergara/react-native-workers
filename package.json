@@ -1,7 +1,7 @@
 
 {
   "name": "rn-workers",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "JS workers for React Native",
   "license": "Apache 2.0",
   "author": "https://github.com/fabriciovergal",

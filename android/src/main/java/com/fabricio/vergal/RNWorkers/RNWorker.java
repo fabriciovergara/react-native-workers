@@ -1,31 +1,23 @@
 package com.fabricio.vergal.RNWorkers;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManager.ReactInstanceEventListener;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.devsupport.RedBoxHandler;
-import com.facebook.react.modules.debug.DeveloperSettings;
 import com.facebook.react.shell.MainReactPackage;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.fabricio.vergal.RNWorkers.RNWorkersUtils.getField;
+import static com.fabricio.vergal.RNWorkers.RNWorkersUtils.replacePrefs;
 
 
 public class RNWorker implements ReactInstanceEventListener {
@@ -36,6 +28,36 @@ public class RNWorker implements ReactInstanceEventListener {
     public static final String PREFS_DEBUG_SERVER_HOST_KEY = "debug_http_host";
     public static final int DEFAULT_WORKER_PORT = 8082;
 
+    private final Application mApplication;
+    private final int mPort;
+    private final String mEntryPoint;
+    private final String mBundleAsset;
+    private final String mBundleFile;
+    private final RedBoxHandler mRedBoxHandler;
+    private final List<ReactPackage> mPackages;
+    private final boolean mDeveloperSupport;
+
+    private ReactApplicationContext mReactContext;
+    private ReactNativeHost mHost;
+
+    public RNWorker(final Application application,
+                    final int port,
+                    final String entryPoint,
+                    final String bundleAsset,
+                    final String bundleFile,
+                    final RedBoxHandler redBoxHandler,
+                    final List<ReactPackage> packages,
+                    final boolean developerSupport) {
+        mApplication = application;
+        mPort = port;
+        mEntryPoint = entryPoint;
+        mBundleAsset = bundleAsset;
+        mBundleFile = bundleFile;
+        mRedBoxHandler = redBoxHandler;
+        mPackages = packages;
+        mDeveloperSupport = developerSupport;
+    }
+
     public static <T extends Application & ReactApplication> RNWorker createDefault(
             final T application, final boolean developerSupport) {
         return new Builder(application, developerSupport)
@@ -45,16 +67,9 @@ public class RNWorker implements ReactInstanceEventListener {
                 .build();
     }
 
-    private final ReactNativeHost mHost;
-    private final int mPort;
-    private ReactApplicationContext mReactContext;
 
-    private RNWorker(final ReactNativeHost host, final int port) {
-        mHost = host;
-        mPort = port;
-    }
-
-    public void start() {
+    public void start(final boolean preferResource) {
+        createHost(preferResource);
         mHost.getReactInstanceManager().addReactInstanceEventListener(this);
         if (!mHost.getReactInstanceManager().hasStartedCreatingInitialContext()) {
             mHost.getReactInstanceManager().createReactContextInBackground();
@@ -80,6 +95,57 @@ public class RNWorker implements ReactInstanceEventListener {
     @Override
     public void onReactContextInitialized(ReactContext context) {
         mReactContext = (ReactApplicationContext) context;
+    }
+
+    private void createHost(final boolean preferResource) {
+        if (mHost == null) {
+            if (preferResource && mBundleAsset == null && mBundleFile == null) {
+                throw new RuntimeException("preferResource is enabled but no resource was provided");
+            }
+
+            mHost = new ReactNativeHost(mApplication) {
+                @Override
+                protected boolean getUseDeveloperSupport() {
+                    return mDeveloperSupport;
+                }
+
+                @Override
+                protected List<ReactPackage> getPackages() {
+                    return mPackages;
+                }
+
+                @Override
+                protected String getJSMainModuleName() {
+                    return preferResource ? null : mEntryPoint;
+                }
+
+                @Nullable
+                @Override
+                protected String getBundleAssetName() {
+                    return mBundleAsset;
+                }
+
+                @Nullable
+                @Override
+                protected String getJSBundleFile() {
+                    return mBundleFile;
+                }
+
+                @Nullable
+                @Override
+                protected RedBoxHandler getRedBoxHandler() {
+                    return mRedBoxHandler;
+                }
+            };
+
+
+            try {
+                replacePrefs(mApplication, mHost, mPort, DEBUG_HOST_FORMAT,
+                        PREFS_DEBUG_SERVER_HOST_KEY);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static class Builder {
@@ -151,6 +217,8 @@ public class RNWorker implements ReactInstanceEventListener {
         }
 
         public RNWorker build() {
+
+
             boolean containMainReactPackage = false;
             boolean containRNWorkerPackage = false;
             for (final ReactPackage pkg : mPackages) {
@@ -161,97 +229,16 @@ public class RNWorker implements ReactInstanceEventListener {
                 }
             }
 
-            if(!containMainReactPackage){
+            if (!containMainReactPackage) {
                 mPackages.add(new MainReactPackage());
             }
 
-            if(!containRNWorkerPackage){
+            if (!containRNWorkerPackage) {
                 mPackages.add(new RNWorkersPackage());
             }
 
-            final ReactNativeHost host = new ReactNativeHost(mApplication) {
-                @Override
-                protected boolean getUseDeveloperSupport() {
-                    return mDeveloperSupport;
-                }
-
-                @Override
-                protected List<ReactPackage> getPackages() {
-                    return mPackages;
-                }
-
-                @Override
-                protected String getJSMainModuleName() {
-                    return mEntryPoint;
-                }
-
-                @Nullable
-                @Override
-                protected String getBundleAssetName() {
-                    return mBundleAsset;
-                }
-
-                @Nullable
-                @Override
-                protected String getJSBundleFile() {
-                    return mBundleFile;
-                }
-
-                @Nullable
-                @Override
-                protected RedBoxHandler getRedBoxHandler() {
-                    return mRedBoxHandler;
-                }
-            };
-
-
-            try {
-                replacePrefs(mApplication, host, mPort);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-
-            return new RNWorker(host, mPort);
-        }
-
-        private static void replacePrefs(final Context context,
-                                         final ReactNativeHost host,
-                                         final int port) throws IllegalAccessException {
-            final String debugHost = String.format(DEBUG_HOST_FORMAT, port);
-            final ReactInstanceManager manager = host.getReactInstanceManager();
-            final DeveloperSettings settings = manager.getDevSupportManager().getDevSettings();
-            final Field sharedPreferenceField = getField(settings, SharedPreferences.class);
-
-            sharedPreferenceField.setAccessible(true);
-            final SharedPreferences preferences = (SharedPreferences) sharedPreferenceField.get(settings);
-            final SharedPreferences newPreferences = context.getSharedPreferences(debugHost, MODE_PRIVATE);
-            final SharedPreferences.Editor editor = newPreferences.edit();
-
-            for (final Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
-                RNWorkersUtils.putObject(editor, entry.getKey(), entry.getValue());
-            }
-
-            editor.putString(PREFS_DEBUG_SERVER_HOST_KEY, debugHost);
-            editor.apply();
-
-            preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String keyChanged) {
-                    final SharedPreferences.Editor editor = newPreferences.edit();
-                    for (final Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-                        if (!entry.getKey().contains(PREFS_DEBUG_SERVER_HOST_KEY)) {
-                            RNWorkersUtils.putObject(editor, entry.getKey(), entry.getValue());
-                        }
-                    }
-
-                    editor.apply();
-                }
-            });
-
-            sharedPreferenceField.set(settings, newPreferences);
-            final OnSharedPreferenceChangeListener listener = (OnSharedPreferenceChangeListener) settings;
-            newPreferences.registerOnSharedPreferenceChangeListener(listener);
-
+            return new RNWorker(mApplication, mPort, mEntryPoint, mBundleAsset, mBundleFile,
+                    mRedBoxHandler, mPackages, mDeveloperSupport);
         }
     }
 }

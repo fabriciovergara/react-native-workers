@@ -5,6 +5,7 @@
 @synthesize mainBridge;
 @synthesize workerDictionary;
 @synthesize simulationEnabled;
+@synthesize preferResourceEnabled;
 
 + (instancetype)sharedInstance
 {
@@ -21,6 +22,7 @@
     self = [super init];
     workerDictionary = [[NSMutableDictionary alloc] init];
     simulationEnabled = [NSNumber numberWithBool: NO];
+    preferResourceEnabled = [NSNumber numberWithBool: NO];
     return self;
 }
 
@@ -37,10 +39,24 @@
     NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:bundle fallbackResource:resource];
     
     #if RCT_DEV
+  
+    if([preferResourceEnabled boolValue] ==  YES){
+        if(resource == nil){
+            [NSException raise:@"rn-worker" format:@"preferResourceEnabled is enabled but no resource was provided"];
+        }
+        
+        jsCodeLocation = [[NSBundle mainBundle] URLForResource:resource withExtension:@"jsbundle"];
+        
+        if(jsCodeLocation == nil){
+            [NSException raise:@"rn-worker" format:@"JS bundle '%@.jsbundle' not found", resource];
+        }
+    }else{
         NSString *workerPort = [NSString stringWithFormat:@"%d", nsPort];
         NSString *appPort = [NSString stringWithFormat:@"%d", jsCodeLocation.port];
         NSString *path = [jsCodeLocation.absoluteString stringByReplacingOccurrencesOfString:appPort withString:workerPort];
         jsCodeLocation = [[NSURL alloc] initWithString:path];
+    }
+    
     #endif
     
     

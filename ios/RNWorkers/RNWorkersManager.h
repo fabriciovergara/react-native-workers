@@ -21,6 +21,7 @@
 @property (nonatomic, strong, readonly) NSMutableDictionary *workerDictionary;
 @property (nonatomic, strong, readonly) RCTBridge *mainBridge;
 @property (nonatomic, assign) NSNumber *simulationEnabled;
+@property (nonatomic, assign) NSNumber *preferResourceEnabled;
 
 @end
 

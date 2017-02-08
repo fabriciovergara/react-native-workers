@@ -1,10 +1,18 @@
 package com.fabricio.vergal.RNWorkers;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.modules.debug.DeveloperSettings;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class RNWorkersUtils {
 
@@ -65,6 +73,49 @@ public class RNWorkersUtils {
         } else if (value instanceof Set) {
             editor.putStringSet(key, (Set<String>) value);
         }
+    }
+
+    protected static void replacePrefs(final Context context,
+                                       final ReactNativeHost host,
+                                       final int port,
+                                       final String debugHostFormat,
+                                       final String prefsDebugServerHostKey) throws IllegalAccessException {
+
+        final String debugHost = String.format(debugHostFormat, port);
+        final ReactInstanceManager manager = host.getReactInstanceManager();
+        final DeveloperSettings settings = manager.getDevSupportManager().getDevSettings();
+        final Field sharedPreferenceField = getField(settings, SharedPreferences.class);
+
+        sharedPreferenceField.setAccessible(true);
+        final SharedPreferences preferences = (SharedPreferences) sharedPreferenceField.get(settings);
+        final SharedPreferences newPreferences = context.getSharedPreferences(debugHost, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = newPreferences.edit();
+
+        for (final Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
+            RNWorkersUtils.putObject(editor, entry.getKey(), entry.getValue());
+        }
+
+        editor.putString(prefsDebugServerHostKey, debugHost);
+        editor.apply();
+
+        preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String keyChanged) {
+                final SharedPreferences.Editor editor = newPreferences.edit();
+                for (final Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
+                    if (!entry.getKey().contains(prefsDebugServerHostKey)) {
+                        RNWorkersUtils.putObject(editor, entry.getKey(), entry.getValue());
+                    }
+                }
+
+                editor.apply();
+            }
+        });
+
+        sharedPreferenceField.set(settings, newPreferences);
+        final SharedPreferences.OnSharedPreferenceChangeListener listener = (SharedPreferences.OnSharedPreferenceChangeListener) settings;
+        newPreferences.registerOnSharedPreferenceChangeListener(listener);
+
     }
 
 }
