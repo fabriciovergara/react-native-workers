@@ -1,4 +1,4 @@
-# react-native-workers (Only for RN 0.40^)
+# react-native-workers (RN 0.41^)
 Do heavy data process outside of your UI JS thread.
 
 Before using this kind of solution you should check if [InteractionManager.runAfterInteractions](https://facebook.github.io/react-native/docs/interactionmanager.html) is not enough for your needs, because creating a aditional worker can considerably increase app memory usage. 
