@@ -72,12 +72,7 @@ Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blo
 
 * [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/OBSERVATIONS.md)
 * [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/EXTRA_FEATURES.md)
-* [Npm useful scripts](https://github.com/fabriciovergal/react-native-workers/blob/master/NPM_SCRIPTS.md)
-* [Changelog](https://github.com/fabriciovergal/react-native-workers/edit/master/CHANGE_LOG.md)
-
- 
- 
- 
+* [Npm useful scripts](https://github.com/fabriciovergal/react-native-workers/blob/master/NPM_SCRIPTS.md) 
  
 # License
 ~~Cancer~~ GPL ..... just kindind, its Apache 2.0
