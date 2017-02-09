@@ -18,14 +18,10 @@ Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blo
 ### App side
 
 ```javascript 
-   
+    //index.ios.js 
     import { Worker } from 'rn-workers'
 
     export default class rnapp extends React.Component {
-
-        constructor (props, context) {
-            super(props, context)
-        }
 
         componentDidMount () {
             //Create using default worker port (8082)
@@ -57,7 +53,7 @@ Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blo
 ### Worker side
 
 ```javascript 
-   
+    //index.worker.js
     import { WorkerService } from 'rn-workers'
     
     const worker = new WorkerService();
@@ -70,7 +66,7 @@ Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blo
  
 ## Aditional Information
 
-* [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/OBSERVATIONS.md)
+* [Observation](https://github.com/fabriciovergal/react-native-workers/blob/master/OBSERVATIONS.md)
 * [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/EXTRA_FEATURES.md)
 * [Npm useful scripts](https://github.com/fabriciovergal/react-native-workers/blob/master/NPM_SCRIPTS.md) 
  
