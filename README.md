@@ -8,129 +8,12 @@ Before using this kind of solution you should check if [InteractionManager.runAf
 npm install --save rn-workers
 react-native link rn-workers
 ```
+Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blob/master/MANUAL_INSTALATION.md)
 
-### Manual Instalation
-
-#### iOS
-
-1. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ `Add Files to <...>`
-2. Go to `node_modules` ➜ `rn-workers` ➜ `ios` ➜ select `RNWorkers.xcodeproj`
-3. Add `RNWorkers.a` to `Build Phases -> Link Binary With Libraries`
-4. Pray and try to compile
-
-#### Android
-1. Add the following lines to `android/settings.gradle`:
-
-```gradle
-    include ':rn-workers'
-    project(':rn-workers').projectDir = new File(rootProject.projectDir, '../node_modules/rn-workers/android')
-```
-
-2. Add the compile line to the dependencies in `android/app/build.gradle`:
-
-```gradle
-    dependencies {
-        compile project(':rn-workers')
-    }
-```
-3. Add the import and link the package in `MainApplication.java`:
-
-```java
-   
-    public class MainApplication extends Application implements ReactApplication {
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new RNWorkersPackage() // <-- add this line
-            );
-        }
-    }
-```
-### Setup
-
-#### iOS
-    
-```swift
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
-      //CRITICAL: Must be initialized before creation of rootView to be possible to debug on chrome console
-      //Initialize using default worker
-      RNWorkersManager.sharedInstance().initWorker()  
-      
-      //If you want to use the default worker and an adicional one
-      RNWorkersManager.sharedInstance().initWorker()
-      RNWorkersManager.sharedInstance().initWorker(withPort: 8083, bundleRoot: "index.worker2", fallbackResouce: "worker2")
-    
-      let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios",
-                                                                          fallbackResource: "main")
-
-      let rootView = RCTRootView.init(bundleURL: jsCodeLocation, moduleName: "rnapp", initialProperties: nil, launchOptions: launchOptions)
-      rootView?.backgroundColor = UIColor.init(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1)
-
-      let rootViewController = UIViewController()
-      rootViewController.view = rootView
-
-      //Pass rootView referece
-      RNWorkersManager.sharedInstance().startWorkers(with: rootView)
-
-      self.window = UIWindow.init(frame: UIScreen.main.bounds)
-      self.window!.rootViewController = rootViewController
-      self.window!.makeKeyAndVisible()
-
-      return true
-    }
-```
-
-#### Android
-
-```java
-    public class MainApplication extends Application implements ReactApplication {
-    
-        (...)
-
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            SoLoader.init(this, /* native exopackage */ false);
-            
-            //Initialize using default worker
-            RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
-            
-           
-            //If you want to use the default worker and an adicional one
-            final RNWorker worker1 = RNWorker.createDefault(this, BuildConfig.DEBUG);
-            final RNWorker worker2 = new RNWorker.Builder(this, BuildConfig.DEBUG)
-                .entryPoint("index.worker2")
-                .bundleAsset("index.worker2.bundle")
-                .port(8082)
-                .packages(new CustomPackage())
-                .build();
-
-            RNWorkersManager.getInstance().init(this, worker1, worker2);
-        }
-    }
-```
-
-```java
-  public class MainActivity extends ReactActivity {
-      
-      (...)
-      
-      @Override
-      protected void onCreate(Bundle savedInstanceState) {       
-        //CRITICAL: Must be started before super.onCreate to be possible to debug on chrome console
-        RNWorkersManager.getInstance().startWorkers();
-        super.onCreate(savedInstanceState);
-      }
-  }
-```
-
-#### Javascript
+## Usage
   
   1. Create a index.worker.js in the react-native root project (same level of index.ios.js and index.android.js)
-  2. import a worker.jsbundle in iOS Project and index.worker.jsbundle  on Android Project
-  
-## Usage
+  2. import a worker.jsbundle in iOS Project and index.worker.jsbundle on Android Project
 
 ### App side
 
@@ -184,107 +67,17 @@ react-native link rn-workers
     };
 
  ```
-
-### Extra Features
-
-    All extra features must be defined before creating any worker.
-
-#### Simulation
-   
-    With Simulation enabled no aditional worker will started and the worker code on app main process.
-    To make it works you need to load the workers entry point when enabled.
-    You don't need to start any aditional packager using this option.
-
-```java
-    public class MainApplication extends Application implements ReactApplication {
-    
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            SoLoader.init(this, /* native exopackage */ false);
-            RNWorkersManager.getInstance().setSimulationEnabled(true);
-            RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
-        }
-    }
-```
-
-```swift
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
-      RNWorkersManager.sharedInstance().simulationEnabled = true
-      RNWorkersManager.sharedInstance().initWorker()  
-      
-        (...)
-      }
-```
-
-```javascript 
-   
-    import { Worker, isSimulationEnabled } from 'rn-workers';
-
-    if (isSimulationEnabled) {
-        /* eslint-disable global-require */
-        require('../../../index.worker');
-        /* eslint-enable global-require */
-    }
- ```
  
+## Aditional Information
 
+* [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/OBSERVATIONS.md)
+* [Other features](https://github.com/fabriciovergal/react-native-workers/blob/master/EXTRA_FEATURES.md)
+* [Npm useful scripts](https://github.com/fabriciovergal/react-native-workers/blob/master/NPM_SCRIPTS.md)
+* [Changelog](https://github.com/fabriciovergal/react-native-workers/edit/master/CHANGE_LOG.md)
 
-#### PreferResouce
-    
-    With PreferResource enabled the library will try to load a pre generated worker jsbundle from given resource name.
-    You don't need to start any aditional packager using this option.
-
-```java
-    public class MainApplication extends Application implements ReactApplication {
-    
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            SoLoader.init(this, /* native exopackage */ false);
-            RNWorkersManager.getInstance().setPreferResourceEnabled(true);
-            RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
-        }
-    }
-```
-```swift
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
-      RNWorkersManager.sharedInstance().preferResouceEnabled = true
-      RNWorkersManager.sharedInstance().initWorker()  
-      
-        (...)
-      }
-```
-  
-
-# Observation
  
-  * To start the project you need to manually start a second Packager using port 8082
-  * Release bundle packaging must be done manually
-  
-### iOS
-
-  * Sometime you need to start and stop the debugger to fully reload the worker js
-  * Start the app debugger will automatically start the worker debugger
-  
-### Android
-
-  * You need to manually execute adb reverse tcp:8082 tcp:8082
-  * Two DevMenu will apears on shake (one for app and other for worker)
-  
-# Scripts
-
-### Release packing
-  
-  * iOS:
-  ```
-  react-native bundle --dev false --assets-dest ./ios --entry-file index.worker.js --platform ios --bundle-output ./ios/worker.jsbundle
-```
-
-  * Android:
-  ```
-  react-native bundle --dev false --assets-dest ./android/app/src/main/res/ --entry-file index.worker.js --platform android  --bundle-output ./android/app/src/main/assets/index.worker.bundle
-``` 
+ 
+ 
  
 # License
 ~~Cancer~~ GPL ..... just kindind, its Apache 2.0
