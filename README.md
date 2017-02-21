@@ -10,10 +10,7 @@ react-native link rn-workers
 ```
 Or [Install manually](https://github.com/fabriciovergal/react-native-workers/blob/master/MANUAL_INSTALATION.md)
 
-## Usage
-  
-  1. Create a index.worker.js in the react-native root project (same level of index.ios.js and index.android.js)
-  2. import a worker.jsbundle in iOS Project and index.worker.jsbundle on Android Project
+Prepare your project following this [SETUP GUIDE](https://github.com/fabriciovergal/react-native-workers/blob/master/SETUP.md)
 
 ### App side
 
