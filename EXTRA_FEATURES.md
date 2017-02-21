@@ -44,7 +44,7 @@ You don't need to start any aditional packager using this option.
  
 
 
-### PreferResouce
+### PreferResouce (Not supported on iOS)
     
 With PreferResource enabled the library will try to load a pre generated worker jsbundle from given resource name.
 You don't need to start any aditional packager using this option.
@@ -60,13 +60,5 @@ You don't need to start any aditional packager using this option.
             RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
         }
     }
-```
-```swift
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
-      RNWorkersManager.sharedInstance().preferResouceEnabled = true
-      RNWorkersManager.sharedInstance().initWorker()  
-      
-        (...)
-      }
 ```
   
