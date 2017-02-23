@@ -3,6 +3,8 @@ Do heavy data process outside of your UI JS thread.
 
 Before using this kind of solution you should check if [InteractionManager.runAfterInteractions](https://facebook.github.io/react-native/docs/interactionmanager.html) is not enough for your needs, because creating a aditional worker can considerably increase app memory usage. 
 
+I mostly use this library for a personal project, that wrap a native database with a graphql api. So the updates may follow my needs, but any PR is welcome. 
+
 ### Automatic Instalation
 ```
 npm install --save rn-workers
