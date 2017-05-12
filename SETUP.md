@@ -39,7 +39,7 @@
             super.onCreate();
             SoLoader.init(this, /* native exopackage */ false);
             //Initialize Manager instance
-            RNWorkersManager.init(this, BuildConfig.DEBUG);
+            RNWorkersManager.getInstance().init(this, BuildConfig.DEBUG);
         }
     }
 ```
@@ -52,7 +52,7 @@
       @Override
       protected void onCreate(Bundle savedInstanceState) {       
         //CRITICAL: Must be started before super.onCreate to be possible to debug on chrome console
-        RNWorkersManager.start(getMainComponentName());
+        RNWorkersManager.getInstance().startWorkers();
         super.onCreate(savedInstanceState);
       }
   }
