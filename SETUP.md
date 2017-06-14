@@ -5,7 +5,7 @@
 ```swift
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:       [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool{
       //CRITICAL: Must be initialized before creation of rootView to be possible to debug on chrome console
-      RNWorkersManager.sharedInstance().initWorker(withBundleRoot: "index.worker", fallbackResouce: "worker", moduleName: "rnapp")  
+      RNWorkersManager.sharedInstance().initWorker()  
 
       let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios",
                                                                           fallbackResource: "main")
