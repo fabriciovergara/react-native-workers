@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
-import com.facebook.react.modules.debug.DeveloperSettings;
+import com.facebook.react.modules.debug.interfaces.DeveloperSettings;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
