@@ -51,8 +51,8 @@
             [NSException raise:@"rn-worker" format:@"JS bundle '%@.jsbundle' not found", resource];
         }
     }else{
-        NSString *workerPort = [NSString stringWithFormat:@"%d", nsPort];
-        NSString *appPort = [NSString stringWithFormat:@"%d", jsCodeLocation.port];
+        NSString *workerPort = [nsPort stringValue];
+        NSString *appPort = [jsCodeLocation.port stringValue];
         NSString *path = [jsCodeLocation.absoluteString stringByReplacingOccurrencesOfString:appPort withString:workerPort];
         jsCodeLocation = [[NSURL alloc] initWithString:path];
     }
