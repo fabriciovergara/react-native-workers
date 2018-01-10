@@ -1,3 +1,7 @@
+# NO LONGER MAINTAINED
+
+Please consider using instead: https://github.com/joltup/react-native-threads
+
 # react-native-workers (RN 0.43^)
 Do heavy data process outside of your UI JS thread.
 
